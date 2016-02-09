@@ -1,0 +1,38 @@
+
+host: 0.0.0.0
+port: 8891
+cors: false
+ui: false
+
+silent: false
+level: info
+storage: /var/cache/manet
+
+engine: phantomjs
+timeout: 60000
+compress: false
+cache: 1
+cleanupStartup: false
+cleanupRuntime: false
+
+commands:
+    slimerjs:
+        linux: "xvfb-run -a slimerjs"
+        freebsd: "xvfb-run -a slimerjs"
+        sunos: "xvfb-run -a slimerjs"
+        darwin: "slimerjs"
+        win32: "slimerjs.bat"
+    phantomjs:
+        linux: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
+        freebsd: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
+        sunos: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
+        darwin: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
+        win32: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
+
+whitelist:
+    - "*"
+
+security:
+    basic:
+#        username: admin
+#        password: admin

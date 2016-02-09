@@ -1,33 +1,25 @@
-# This is a Dockerfile for creating a Manet container from a base Ubuntu 14:04 image.
-# Manet's code can be found here: https://github.com/vbauer/manet
-#
-# To use this container, start it as usual:
-#
-#    $ sudo docker run pdelsante/manet
-#
-# Then find out its IP address by running:
-#
-#    $ sudo docker ps                  
-#    CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-#    d1d7165512e2        pdelsante/manet     "/usr/bin/manet"    48 seconds ago      Up 47 seconds       8891/tcp            romantic_cray
-#
-#    $ sudo docker inspect d1d7165512e2 | grep IPAddress
-#         "IPAddress": "172.17.0.1",
-#
-# Now you can connect to:
-#    http://172.17.0.1:8891
-#
-FROM ubuntu:14.04
-MAINTAINER pietro.delsante@gmail.com
-ENV DEBIAN_FRONTEND noninteractive
+FROM node
+MAINTAINER andrew@ei-grad.ru
 EXPOSE 8891
 
-RUN apt-get update && \
-    apt-get -y install curl && \
-    curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - && \
-    apt-get -y install nodejs build-essential xvfb libfontconfig1 && \
-    npm install -g slimerjs@0.9.6-2 && \
-    npm install -g phantomjs@1.9.19 && \
-    npm install -g manet@0.4.8
+RUN (echo "deb http://ppa.launchpad.net/no1wantdthisname/ppa/ubuntu trusty main"; \
+     echo "deb-src http://ppa.launchpad.net/no1wantdthisname/ppa/ubuntu trusty main") \
+    >> /etc/apt/sources.list.d/infinality.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E985B27B && \
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get -y install xvfb fontconfig-infinality && \
+    /etc/fonts/infinality/infctl.sh setstyle osx && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
-ENTRYPOINT ["/usr/bin/manet"]
+# see https://github.com/graingert/slimerjs/issues/34
+RUN npm install -g 'slimerjs@0.9.6-2' phantomjs-prebuilt manet && \
+    rm -rf /root/.npm
+
+ADD default.yaml /usr/local/lib/node_modules/manet/src/config/default.yaml
+
+RUN mkdir /var/cache/manet /var/cache/phantomjs
+VOLUME /var/cache/manet
+VOLUME /var/cache/phantomjs
+
+ENTRYPOINT ["/usr/local/bin/manet"]
