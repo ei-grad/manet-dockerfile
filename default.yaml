@@ -17,17 +17,9 @@ cleanupRuntime: false
 
 commands:
     slimerjs:
-        linux: "xvfb-run -a slimerjs"
-        freebsd: "xvfb-run -a slimerjs"
-        sunos: "xvfb-run -a slimerjs"
-        darwin: "slimerjs"
-        win32: "slimerjs.bat"
+        linux: "xvfb-run slimerjs --disk-cache=yes --profile /var/cache/slimerjs"
     phantomjs:
         linux: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
-        freebsd: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
-        sunos: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
-        darwin: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
-        win32: "phantomjs --ignore-ssl-errors=true --web-security=false --disk-cache=true --disk-cache-path=/var/cache/phantomjs"
 
 whitelist:
     - "*"
